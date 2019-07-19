@@ -6,9 +6,6 @@
 import pytest
 
 
-from playerstars_adapters import playerstars_adapters
-
-
 @pytest.fixture
 def response():
     """Sample pytest fixture.

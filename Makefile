@@ -54,7 +54,7 @@ lint: ## check style with flake8
 	flake8 playerstars_adapters tests
 
 tests:
-	python3 -m pytest -s -v --cov=tests --cov=playerstars_domain -W ignore::DeprecationWarning --cov-report html --cov-report term-missing
+	python3 -m pytest -s -v --cov=tests --cov=playerstars_adapters -W ignore::DeprecationWarning --cov-report html --cov-report term-missing
 	@echo "Linting..."
 	@flake8 playerstars_dynamo_adapters/ --max-complexity=5 --ignore=S311
 	@flake8 tests/ --ignore=S101,S311,F811

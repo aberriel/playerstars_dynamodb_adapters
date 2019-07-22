@@ -4,7 +4,8 @@ from unittest.mock import patch, MagicMock
 import pytest
 
 from tests.basic_adapter_utils import (
-    make_mock_client, Adapter, Entity, make_mock_table, make_mock_table_with_update_error)
+    make_mock_client, Adapter, Entity, make_mock_table,
+    make_mock_table_with_update_error)
 
 
 class Patches:
@@ -129,7 +130,6 @@ def test_update(mock1, mock2, mock3):
     entity.set_adapter(adapter)
     updated_entity = entity.update()
     new_saved_id = updated_entity.entity_id
-    new_expected = entity.to_json()
     mock2.return_value.update_item.assert_called_with(
         ExpressionAttributeValues={':value0': {str: 'nome4'}},
         Key={'entity_id': new_saved_id},

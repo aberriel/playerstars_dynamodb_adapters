@@ -141,7 +141,7 @@ def test_update(mock1, mock2, mock3):
 @patch('boto3.resource')
 @patch(Patches.GET_TABLE, return_value=make_mock_table_with_update_error())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
-def test_update_entity_id_not_found(mock1, mock2, mock3):
+def test_update_error(mock1, mock2, mock3):
     adapter = Adapter('tbl3')
     entity_one = Entity('id1', 'nome1')
     entity_one.set_adapter(adapter)

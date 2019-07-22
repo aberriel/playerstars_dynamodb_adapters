@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 import pytest
 
 from tests.basic_adapter_utils import (
-    make_mock_client, Adapter, Entity, make_mock_table)
+    make_mock_client, Adapter, Entity, make_mock_table, make_mock_table_with_update_error)
 
 
 class Patches:
@@ -114,6 +114,53 @@ def test_save(mock1, mock2, mock3):
 @patch('boto3.resource')
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
+def test_update(mock1, mock2, mock3):
+    adapter = Adapter('tbl3')
+    entity = Entity('id1', 'nome1')
+    entity.set_adapter(adapter)
+    saved_id = entity.save()
+
+    assert saved_id == 'id1'
+    mock2.return_value.put_item.assert_called_once()
+
+    expected = entity.to_json()
+    mock2.return_value.put_item.assert_called_with(Item=expected)
+    entity = Entity('id1', 'nome4')
+    entity.set_adapter(adapter)
+    updated_entity = entity.update()
+    new_saved_id = updated_entity.entity_id
+    new_expected = entity.to_json()
+    mock2.return_value.update_item.assert_called_with(
+        ExpressionAttributeValues={':value0': {str: 'nome4'}},
+        Key={'entity_id': new_saved_id},
+        UpdateExpression='SET nome = :value0')
+    assert updated_entity.nome == 'nome4'
+
+
+# noinspection PyUnusedLocal,PyUnusedLocal
+@patch('boto3.resource')
+@patch(Patches.GET_TABLE, return_value=make_mock_table_with_update_error())
+@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
+def test_update_entity_id_not_found(mock1, mock2, mock3):
+    adapter = Adapter('tbl3')
+    entity_one = Entity('id1', 'nome1')
+    entity_one.set_adapter(adapter)
+    saved_id = entity_one.save()
+
+    assert saved_id == 'id1'
+    mock2.return_value.put_item.assert_called_once()
+
+    expected = entity_one.to_json()
+    mock2.return_value.put_item.assert_called_with(Item=expected)
+    entity_two = Entity('id4', 'nome4')
+    entity_two.set_adapter(adapter)
+    assert entity_two.update() is None
+
+
+# noinspection PyUnusedLocal,PyUnusedLocal
+@patch('boto3.resource')
+@patch(Patches.GET_TABLE, return_value=make_mock_table())
+@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_filter(mock1, mock2, mock3):
     adapter = Adapter('tbl3')
 
@@ -146,3 +193,11 @@ def test_filter_no_conditions(mock1, mock2, mock3):
         adapter.filter()
 
     assert str(excinfo.value) == 'Nenhuma condição no filtro.'
+
+
+# noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
+@patch('boto3.resource')
+@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
+def test_get_table(mock1, mock2):
+    adapter = Adapter('tbl3')
+    assert adapter.get_table()

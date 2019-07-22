@@ -85,6 +85,32 @@ class BasicDynamodbAdapter:
         self._table.put_item(Item=json_data)
         return entity_id
 
+    def update(self, json_data):
+        placeholders = dict()
+        update_attributes = list()
+        entity_id = json_data.get('entity_id')
+        self.logger.info('Updating entity with data: {}'.format(json_data))
+        itens_to_update = json_data
+        itens_to_update.pop('entity_id')
+
+        for attribute, value in itens_to_update.items():
+            attribute_type = type(attribute)
+            attr_placeholder = f":value{len(placeholders)}"
+            placeholders[attr_placeholder] = {attribute_type: value}
+            update_attributes.append(f"{attribute} = {attr_placeholder}")
+            if update_attributes:
+                response = self._table.update_item(
+                    Key={'entity_id': entity_id},
+                    UpdateExpression=f'SET {", ".join(update_attributes)}',
+                    ExpressionAttributeValues=placeholders
+                )
+                if 'Item' in response:
+                    self.logger.info("UpdateItem succeeded: ")
+                    return self._class.from_json(response['Item'])
+                else:
+                    self.logger.info("Oops, something wen wrong.")
+                    return None
+
     def filter(self, **kwargs):
         """
         Filtra objetos de acordo com o critério especificado.
@@ -121,7 +147,6 @@ class BasicDynamodbAdapter:
                 raise ValueError('Comparador inválido: {}'.format(op))
 
             conditions.append(getattr(Attr(field), op)(kwargs[k]))
-
         if not conditions:
             raise ValueError('Nenhuma condição no filtro.')
 
@@ -135,5 +160,5 @@ class BasicDynamodbAdapter:
 
         return [self._class.from_json(x) for x in result['Items']]
 
-    class DyanmodbAdapterScanException(BaseException):
+    class DynamodbAdapterScanException(BaseException):
         pass

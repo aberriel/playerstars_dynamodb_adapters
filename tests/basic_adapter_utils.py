@@ -5,6 +5,12 @@ from playerstars_domain import BasicEntity
 from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
 
 
+class Patches:
+    BASE = 'playerstars_adapters.basic_adapter'
+    BOTO3_CLIENT = f'{BASE}.boto3.client'
+    GET_TABLE = f'{BASE}.BasicDynamodbAdapter.get_table'
+
+
 class Entity(BasicEntity):
     def __init__(self, entity_id, nome):
         super(Entity, self).__init__(entity_id)

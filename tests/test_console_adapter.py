@@ -3,13 +3,7 @@
 
 from unittest.mock import patch
 from playerstars_adapters import ConsoleAdapter
-from tests.basic_adapter_utils import make_mock_client, make_mock_table
-
-
-class Patches:
-    BASE = 'playerstars_adapters.basic_adapter'
-    BOTO3_CLIENT = f'{BASE}.boto3.client'
-    GET_TABLE = f'{BASE}.BasicDynamodbAdapter.get_table'
+from tests.basic_adapter_utils import make_mock_client, make_mock_table, Patches
 
 
 # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal

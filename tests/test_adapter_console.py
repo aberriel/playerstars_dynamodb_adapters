@@ -3,9 +3,7 @@
 
 from unittest.mock import patch
 from playerstars_adapters import ConsoleAdapter
-from tests.basic_adapter_utils import (
-    make_mock_client, Adapter, Entity, make_mock_table,
-    make_mock_table_with_update_error)
+from tests.basic_adapter_utils import make_mock_client, make_mock_table
 
 
 class Patches:

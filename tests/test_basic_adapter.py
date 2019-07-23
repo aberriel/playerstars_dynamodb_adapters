@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from unittest.mock import patch, MagicMock
 
 # noinspection PyPackageRequirements
@@ -134,7 +137,7 @@ def test_filter_invalid_operator(mock1, mock2, mock3):
     with pytest.raises(ValueError) as excinfo:
         adapter.filter(id__invalid='id1')
 
-    assert 'Comparador inv·lido' in str(excinfo.value)
+    assert 'Comparador inv√°lido' in str(excinfo.value)
 
 
 # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
@@ -147,7 +150,7 @@ def test_filter_no_conditions(mock1, mock2, mock3):
     with pytest.raises(ValueError) as excinfo:
         adapter.filter()
 
-    assert str(excinfo.value) == 'Nenhuma condiÁ„o no filtro.'
+    assert str(excinfo.value) == 'Nenhuma condi√ß√£o no filtro.'
 
 
 # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal

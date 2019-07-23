@@ -1,7 +1,8 @@
 from unittest.mock import MagicMock
 
-from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
 from playerstars_domain import BasicEntity
+
+from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
 
 
 class Entity(BasicEntity):
@@ -21,6 +22,18 @@ class Entity(BasicEntity):
 class Adapter(BasicDynamodbAdapter):
     def __init__(self, table_name):
         super(Adapter, self).__init__(table_name, Entity)
+
+
+def raise_if_empty(arg):
+    if isinstance(arg, (list, set)):
+        for value in arg:
+            raise_if_empty(arg=value)
+    elif isinstance(arg, dict):
+        for value in arg.values():
+            raise_if_empty(arg=value)
+
+    if hasattr(arg, '__len__') and len(arg) == 0:
+        raise ValueError('Item vazio encontrado')
 
 
 def make_mock_client():
@@ -45,19 +58,6 @@ def make_mock_table():
         return_value=dict(Item=dict(entity_id='id1', nome='nome4')))
     table_mock = MagicMock(scan=mock_scan,
                            get_item=mock_get_item,
-                           update_item=mock_update_item)
-
-    return table_mock
-
-
-def make_mock_table_with_update_error():
-    json_data1 = dict(entity_id='id1', nome='nome1')
-    json_data2 = dict(entity_id='id2', nome='nome2')
-
-    mock_scan = MagicMock(return_value=dict(Items=[json_data1,
-                                                   json_data2]))
-    mock_update_item = MagicMock()
-    table_mock = MagicMock(scan=mock_scan,
                            update_item=mock_update_item)
 
     return table_mock

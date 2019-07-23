@@ -8,3 +8,4 @@ __version__ = '0.1.0'
 
 from .basic_adapter import BasicDynamodbAdapter
 from .console_adapter import ConsoleAdapter
+from .user_adapter import UserAdapter

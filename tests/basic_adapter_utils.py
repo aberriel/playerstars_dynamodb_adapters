@@ -24,6 +24,18 @@ class Adapter(BasicDynamodbAdapter):
         super(Adapter, self).__init__(table_name, Entity)
 
 
+def raise_if_empty(arg):
+    if isinstance(arg, (list, set)):
+        for value in arg:
+            raise_if_empty(arg=value)
+    elif isinstance(arg, dict):
+        for value in arg.values():
+            raise_if_empty(arg=value)
+
+    if hasattr(arg, '__len__') and len(arg) == 0:
+        raise ValueError('Item vazio encontrado')
+
+
 def make_mock_client():
     return MagicMock(
         list_tables=MagicMock(

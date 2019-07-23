@@ -2,9 +2,11 @@ from unittest.mock import patch, MagicMock
 
 # noinspection PyPackageRequirements
 import pytest
+from pytest import raises
 
+from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
 from tests.basic_adapter_utils import (
-    make_mock_client, Adapter, Entity, make_mock_table)
+    make_mock_client, Adapter, Entity, make_mock_table, raise_if_empty)
 
 
 class Patches:
@@ -154,3 +156,45 @@ def test_filter_no_conditions(mock1, mock2, mock3):
 def test_get_table(mock1, mock2):
     adapter = Adapter('tbl3')
     assert adapter.get_table()
+
+
+# noinspection PyProtectedMember
+def test_remove_empties_set():
+    arg = {1, 2, 3, ''}
+    result = BasicDynamodbAdapter._remove_empties(arg)
+
+    assert result == {1, 2, 3}
+
+
+# noinspection PyProtectedMember
+def test_remove_empties_list():
+    arg = [1, 2, 3, '', dict(), []]
+    result = BasicDynamodbAdapter._remove_empties(arg)
+
+    assert result == [1, 2, 3]
+
+
+# noinspection PyProtectedMember
+def test_remove_empties_complexo():
+    arg = dict(k1='fica', k2=dict(sk1='fica2', sk2=['', ''], sk3={1, 2, ''}))
+    result = BasicDynamodbAdapter._remove_empties(arg)
+
+    assert result == dict(k1='fica', k2=dict(sk1='fica2', sk3={1, 2}))
+
+
+def test_raise_if_empty_raises():
+    arg = [1, 2, '']
+
+    with raises(ValueError) as excinfo:
+        raise_if_empty(arg)
+
+    assert 'Item vazio encontrado' in str(excinfo.value)
+
+
+def test_raise_if_empty_raises_with_dict():
+    arg = [1, 2, dict(a=1, b='')]
+
+    with raises(ValueError) as excinfo:
+        raise_if_empty(arg)
+
+    assert 'Item vazio encontrado' in str(excinfo.value)

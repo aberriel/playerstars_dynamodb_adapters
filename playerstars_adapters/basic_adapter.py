@@ -77,11 +77,52 @@ class BasicDynamodbAdapter:
         else:
             return None
 
+    @staticmethod
+    def _clean_set_empty_elements(arg):
+        arg = set(x for x in arg if not hasattr(x, '__len__') or
+                  len(x) > 0)
+        return arg
+
+    @staticmethod
+    def _clean_list_empty_elements(arg):
+        result = []
+        for value in arg:
+            clean_value = BasicDynamodbAdapter._remove_empties(value)
+            if clean_value:
+                result.append(clean_value)
+        return result
+
+    @staticmethod
+    def _clean_dict_empty_elements(arg):
+        result = {}
+        for key, value in arg.items():
+            clean_value = BasicDynamodbAdapter._remove_empties(value)
+            if clean_value:
+                result.update({key: clean_value})
+        return result
+
+    @staticmethod
+    def _remove_empties(arg):
+        if isinstance(arg, set):
+            return BasicDynamodbAdapter._clean_set_empty_elements(arg)
+
+        if isinstance(arg, list):
+            return BasicDynamodbAdapter._clean_list_empty_elements(arg)
+
+        if isinstance(arg, dict):
+            return BasicDynamodbAdapter._clean_dict_empty_elements(arg)
+
+        if not hasattr(arg, '__len__') or len(arg) != 0:
+            return arg
+        else:
+            return None
+
     def save(self, json_data):
         entity_id = json_data.get('entity_id', str(uuid4()))
         json_data.update(dict(entity_id=entity_id))
         self.logger.info('Saving entity with data: {}'.format(json_data))
-        self._table.put_item(Item=json_data)
+        clean_data = BasicDynamodbAdapter._remove_empties(json_data)
+        self._table.put_item(Item=clean_data)
         return entity_id
 
     def filter(self, **kwargs):

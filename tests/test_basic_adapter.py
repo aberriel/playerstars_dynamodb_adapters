@@ -9,13 +9,8 @@ from pytest import raises
 
 from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
 from tests.basic_adapter_utils import (
-    make_mock_client, Adapter, Entity, make_mock_table, raise_if_empty)
-
-
-class Patches:
-    BASE = 'playerstars_adapters.basic_adapter'
-    BOTO3_CLIENT = f'{BASE}.boto3.client'
-    GET_TABLE = f'{BASE}.BasicDynamodbAdapter.get_table'
+    make_mock_client, Adapter, Entity, make_mock_table, raise_if_empty,
+    Patches)
 
 
 # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal

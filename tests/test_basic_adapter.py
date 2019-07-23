@@ -129,6 +129,7 @@ def test_update(mock1, mock2, mock3):
     entity = Entity('id1', 'nome4')
     entity.set_adapter(adapter)
     updated_entity = entity.update()
+    print(updated_entity)
     new_saved_id = updated_entity.entity_id
     mock2.return_value.update_item.assert_called_with(
         ExpressionAttributeValues={':value0': {str: 'nome4'}},

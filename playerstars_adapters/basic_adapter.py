@@ -1,9 +1,8 @@
+import logging
 from uuid import uuid4
 
 import boto3
 from boto3.dynamodb.conditions import Attr
-
-import logging
 
 
 class BasicDynamodbAdapter:
@@ -78,38 +77,53 @@ class BasicDynamodbAdapter:
         else:
             return None
 
+    @staticmethod
+    def _clean_set_empty_elements(arg):
+        arg = set(x for x in arg if not hasattr(x, '__len__') or
+                  len(x) > 0)
+        return arg
+
+    @staticmethod
+    def _clean_list_empty_elements(arg):
+        result = []
+        for value in arg:
+            clean_value = BasicDynamodbAdapter._remove_empties(value)
+            if clean_value:
+                result.append(clean_value)
+        return result
+
+    @staticmethod
+    def _clean_dict_empty_elements(arg):
+        result = {}
+        for key, value in arg.items():
+            clean_value = BasicDynamodbAdapter._remove_empties(value)
+            if clean_value:
+                result.update({key: clean_value})
+        return result
+
+    @staticmethod
+    def _remove_empties(arg):
+        if isinstance(arg, set):
+            return BasicDynamodbAdapter._clean_set_empty_elements(arg)
+
+        if isinstance(arg, list):
+            return BasicDynamodbAdapter._clean_list_empty_elements(arg)
+
+        if isinstance(arg, dict):
+            return BasicDynamodbAdapter._clean_dict_empty_elements(arg)
+
+        if not hasattr(arg, '__len__') or len(arg) != 0:
+            return arg
+        else:
+            return None
+
     def save(self, json_data):
         entity_id = json_data.get('entity_id', str(uuid4()))
         json_data.update(dict(entity_id=entity_id))
         self.logger.info('Saving entity with data: {}'.format(json_data))
-        self._table.put_item(Item=json_data)
+        clean_data = BasicDynamodbAdapter._remove_empties(json_data)
+        self._table.put_item(Item=clean_data)
         return entity_id
-
-    def update(self, json_data):
-        placeholders = dict()
-        update_attributes = list()
-        entity_id = json_data.get('entity_id')
-        self.logger.info('Updating entity with data: {}'.format(json_data))
-        itens_to_update = json_data
-        itens_to_update.pop('entity_id')
-
-        for attribute, value in itens_to_update.items():
-            attribute_type = type(attribute)
-            attr_placeholder = f":value{len(placeholders)}"
-            placeholders[attr_placeholder] = {attribute_type: value}
-            update_attributes.append(f"{attribute} = {attr_placeholder}")
-            if update_attributes:
-                response = self._table.update_item(
-                    Key={'entity_id': entity_id},
-                    UpdateExpression=f'SET {", ".join(update_attributes)}',
-                    ExpressionAttributeValues=placeholders
-                )
-                if 'Item' in response:
-                    self.logger.info("UpdateItem succeeded: ")
-                    return self._class.from_json(response['Item'])
-                else:
-                    self.logger.info("Oops, something wen wrong.")
-                    return None
 
     def filter(self, **kwargs):
         """

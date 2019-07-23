@@ -2,10 +2,11 @@ from unittest.mock import patch, MagicMock
 
 # noinspection PyPackageRequirements
 import pytest
+from pytest import raises
 
+from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
 from tests.basic_adapter_utils import (
-    make_mock_client, Adapter, Entity, make_mock_table,
-    make_mock_table_with_update_error)
+    make_mock_client, Adapter, Entity, make_mock_table, raise_if_empty)
 
 
 class Patches:
@@ -115,52 +116,6 @@ def test_save(mock1, mock2, mock3):
 @patch('boto3.resource')
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
-def test_update(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
-    entity = Entity('id1', 'nome1')
-    entity.set_adapter(adapter)
-    saved_id = entity.save()
-
-    assert saved_id == 'id1'
-    mock2.return_value.put_item.assert_called_once()
-
-    expected = entity.to_json()
-    mock2.return_value.put_item.assert_called_with(Item=expected)
-    entity = Entity('id1', 'nome4')
-    entity.set_adapter(adapter)
-    updated_entity = entity.update()
-    new_saved_id = updated_entity.entity_id
-    mock2.return_value.update_item.assert_called_with(
-        ExpressionAttributeValues={':value0': {str: 'nome4'}},
-        Key={'entity_id': new_saved_id},
-        UpdateExpression='SET nome = :value0')
-    assert updated_entity.nome == 'nome4'
-
-
-# noinspection PyUnusedLocal,PyUnusedLocal
-@patch('boto3.resource')
-@patch(Patches.GET_TABLE, return_value=make_mock_table_with_update_error())
-@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
-def test_update_error(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
-    entity_one = Entity('id1', 'nome1')
-    entity_one.set_adapter(adapter)
-    saved_id = entity_one.save()
-
-    assert saved_id == 'id1'
-    mock2.return_value.put_item.assert_called_once()
-
-    expected = entity_one.to_json()
-    mock2.return_value.put_item.assert_called_with(Item=expected)
-    entity_two = Entity('id4', 'nome4')
-    entity_two.set_adapter(adapter)
-    assert entity_two.update() is None
-
-
-# noinspection PyUnusedLocal,PyUnusedLocal
-@patch('boto3.resource')
-@patch(Patches.GET_TABLE, return_value=make_mock_table())
-@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_filter(mock1, mock2, mock3):
     adapter = Adapter('tbl3')
 
@@ -201,3 +156,45 @@ def test_filter_no_conditions(mock1, mock2, mock3):
 def test_get_table(mock1, mock2):
     adapter = Adapter('tbl3')
     assert adapter.get_table()
+
+
+# noinspection PyProtectedMember
+def test_remove_empties_set():
+    arg = {1, 2, 3, ''}
+    result = BasicDynamodbAdapter._remove_empties(arg)
+
+    assert result == {1, 2, 3}
+
+
+# noinspection PyProtectedMember
+def test_remove_empties_list():
+    arg = [1, 2, 3, '', dict(), []]
+    result = BasicDynamodbAdapter._remove_empties(arg)
+
+    assert result == [1, 2, 3]
+
+
+# noinspection PyProtectedMember
+def test_remove_empties_complexo():
+    arg = dict(k1='fica', k2=dict(sk1='fica2', sk2=['', ''], sk3={1, 2, ''}))
+    result = BasicDynamodbAdapter._remove_empties(arg)
+
+    assert result == dict(k1='fica', k2=dict(sk1='fica2', sk3={1, 2}))
+
+
+def test_raise_if_empty_raises():
+    arg = [1, 2, '']
+
+    with raises(ValueError) as excinfo:
+        raise_if_empty(arg)
+
+    assert 'Item vazio encontrado' in str(excinfo.value)
+
+
+def test_raise_if_empty_raises_with_dict():
+    arg = [1, 2, dict(a=1, b='')]
+
+    with raises(ValueError) as excinfo:
+        raise_if_empty(arg)
+
+    assert 'Item vazio encontrado' in str(excinfo.value)

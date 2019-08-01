@@ -70,6 +70,28 @@ def test_list_all(mock1, mock2, mock3):
 
 # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
 @patch('boto3.resource')
+@patch(Patches.GET_TABLE)
+@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
+def test_delete(mock1, mock2, mock3):
+    adapter = Adapter('tbl3')
+
+    result = adapter.delete('id1')
+
+    assert result == 'id1'
+
+
+# noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
+@patch('boto3.resource')
+@patch(Patches.GET_TABLE, return_value=make_mock_table())
+@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
+def test_delete_raises(mock1, mock2, mock3):
+    adapter = Adapter('tbl3')
+    result = adapter.delete('id1')
+    assert result is None
+
+
+# noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
+@patch('boto3.resource')
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_get_by_id(mock1, mock2, mock3):

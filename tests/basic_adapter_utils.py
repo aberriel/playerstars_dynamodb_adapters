@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock
 
 from playerstars_domain import BasicEntity
+from botocore.exceptions import ClientError
 
 from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
 
@@ -62,8 +63,14 @@ def make_mock_table():
                                                    json_data2]))
     mock_update_item = MagicMock(
         return_value=dict(Item=dict(entity_id='id1', nome='nome4')))
+    mock_delete_item = MagicMock(
+        side_effect=ClientError(
+            error_response=dict(
+                Error=dict(Code=500, Message='oops')),
+            operation_name='delete'))
     table_mock = MagicMock(scan=mock_scan,
                            get_item=mock_get_item,
-                           update_item=mock_update_item)
+                           update_item=mock_update_item,
+                           delete_item=mock_delete_item)
 
     return table_mock

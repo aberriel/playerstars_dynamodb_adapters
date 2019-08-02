@@ -3,6 +3,7 @@ from uuid import uuid4
 
 import boto3
 from boto3.dynamodb.conditions import Attr
+from botocore.exceptions import ClientError
 
 
 class BasicDynamodbAdapter:
@@ -123,6 +124,16 @@ class BasicDynamodbAdapter:
         self.logger.info('Saving entity with data: {}'.format(json_data))
         clean_data = BasicDynamodbAdapter._remove_empties(json_data)
         self._table.put_item(Item=clean_data)
+        return entity_id
+
+    def delete(self, entity_id):
+        try:
+            self._table.delete_item(Key=dict(entity_id=entity_id),
+                                    ReturnValues="ALL_OLD")
+        except ClientError as e:
+            self._logger.info('Erro deletando entrada.')
+            self._logger.info(e.response['Error']['Message'])
+            return None
         return entity_id
 
     def filter(self, **kwargs):

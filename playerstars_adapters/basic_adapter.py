@@ -25,7 +25,7 @@ class BasicDynamodbAdapter:
         return self._logger
 
     def _do_table_exists(self):
-        existing_tables = boto3.client('dynamodb').list_tables()
+        existing_tables = boto3.client('dynamodb', endpoint_url='http://localhost:8000').list_tables()
         return self._table_name in existing_tables['TableNames']
 
     def _create_table_if_dont_exists(self):
@@ -58,7 +58,7 @@ class BasicDynamodbAdapter:
 
     @staticmethod
     def get_db():
-        return boto3.resource('dynamodb')
+        return boto3.resource('dynamodb', endpoint_url='http://localhost:8000')
 
     def get_table(self):
         return self._db.Table(self._table_name)

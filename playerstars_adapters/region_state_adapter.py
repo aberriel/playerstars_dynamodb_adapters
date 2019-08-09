@@ -6,7 +6,7 @@ from playerstars_domain import StateRegion
 
 
 class StateRegionAdapter(BasicDynamodbAdapter):
-    __table_name__ = 'Region'
+    __table_name__ = 'RegionState'
 
     def __init__(self):
         super(StateRegionAdapter, self).__init__(self.__table_name__, StateRegion)

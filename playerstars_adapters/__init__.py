@@ -12,4 +12,5 @@ from .user_adapter import UserAdapter
 from .player_adapter import PlayerAdapter
 from .region_country_adapter import CountryRegionAdapter
 from .region_state_adapter import StateRegionAdapter
+from .team_adapter import TeamAdapter
 from .user_admin_adapter import UserAdminAdapter

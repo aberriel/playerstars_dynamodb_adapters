@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from playerstars_adapters import TeamAdapter
 from tests.basic_adapter_utils import (
     make_mock_client, make_mock_table, Patches)

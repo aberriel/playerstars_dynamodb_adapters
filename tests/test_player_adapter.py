@@ -104,7 +104,9 @@ def player_dict_expected(player_id, user_id):
         "golden_star_balance": 123,
         "blue_star_balance": 321,
         "games": [],
-        "favorites": []
+        "favorites": [],
+        "countries_regions": [],
+        "states_regions": []
     }
 
 

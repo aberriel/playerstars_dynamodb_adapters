@@ -3,7 +3,5 @@ from playerstars_adapters import BasicDynamodbAdapter
 
 
 class DuelAdapter(BasicDynamodbAdapter):
-    __table_name__ = 'Duel'
-
-    def __init__(self):
-        super(DuelAdapter, self).__init__(self.__table_name__, Duel)
+    def __init__(self, table_name):
+        super(DuelAdapter, self).__init__(table_name, Duel)

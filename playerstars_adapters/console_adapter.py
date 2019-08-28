@@ -3,7 +3,5 @@ from playerstars_domain import Console
 
 
 class ConsoleAdapter(BasicDynamodbAdapter):
-    __table_name__ = 'Console'
-
-    def __init__(self):
-        super(ConsoleAdapter, self).__init__(self.__table_name__, Console)
+    def __init__(self, table_name):
+        super(ConsoleAdapter, self).__init__(table_name, Console)

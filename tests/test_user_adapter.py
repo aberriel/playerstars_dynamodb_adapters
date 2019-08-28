@@ -11,7 +11,7 @@ from datetime import datetime
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_user_adapter(mock1, mock2, mock3):
-    adapter = UserAdapter()
+    adapter = UserAdapter('user')
     assert adapter
 
 
@@ -45,7 +45,7 @@ def user_dict_expected(user_id):
 @patch(Patches.GET_TABLE, return_value=make_mock_player_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_player_save(mock, mock1, mock2):
-    adapter = UserAdapter()
+    adapter = UserAdapter('user')
     entity = User(
         name='Pablinho',
         email='menoti@hotmail.com',

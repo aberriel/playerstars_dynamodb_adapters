@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from unittest.mock import patch
 from playerstars_adapters import CountryRegionAdapter, StateRegionAdapter
 from tests.basic_adapter_utils import (

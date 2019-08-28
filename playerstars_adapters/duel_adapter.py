@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from playerstars_domain import Duel
 from playerstars_adapters import BasicDynamodbAdapter
 

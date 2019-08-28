@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from unittest.mock import patch, MagicMock
 
 # noinspection PyPackageRequirements

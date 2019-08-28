@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from playerstars_adapters import BasicDynamodbAdapter
 from playerstars_domain import Console
 

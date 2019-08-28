@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from unittest.mock import patch, MagicMock
 from playerstars_adapters import UserAdapter
 from tests.basic_adapter_utils import (

@@ -15,3 +15,7 @@ from .region_state_adapter import StateRegionAdapter
 from .team_adapter import TeamAdapter
 from .user_admin_adapter import UserAdminAdapter
 from .duel_adapter import DuelAdapter
+
+__all__ = ['BasicDynamodbAdapter', 'ConsoleAdapter', 'UserAdapter',
+           'PlayerAdapter', 'CountryRegionAdapter', 'StateRegionAdapter',
+           'TeamAdapter', 'UserAdminAdapter', 'DuelAdapter']

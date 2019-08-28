@@ -9,4 +9,5 @@ class StateRegionAdapter(BasicDynamodbAdapter):
     __table_name__ = 'RegionState'
 
     def __init__(self):
-        super(StateRegionAdapter, self).__init__(self.__table_name__, StateRegion)
+        super(StateRegionAdapter, self).__init__(self.__table_name__,
+                                                 StateRegion)

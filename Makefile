@@ -1,3 +1,5 @@
+DEVPI_URL ?= https://devpi.qa.stormsec.com.br/deploy/dev/+simple
+
 .PHONY: clean clean-test clean-pyc clean-build docs help tests
 .DEFAULT_GOAL := help
 
@@ -50,21 +52,12 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-lint: ## check style with flake8
-	flake8 playerstars_adapters tests
-
 tests:
-	python3 -m pytest -s -v --cov=tests --cov=playerstars_domain -W ignore::DeprecationWarning --cov-report html --cov-report term-missing
+	@python3 -m pytest -s -v --cov=tests --cov=playerstars_adapters -W ignore::DeprecationWarning --cov-report html --cov-report term-missing:skip-covered
 	@echo "Linting..."
-	@flake8 playerstars_dynamo_adapters/ --max-complexity=5 --ignore=S311
+	@flake8 playerstars_adapters/ --max-complexity=5
 	@flake8 tests/ --ignore=S101,S311,F811
 	@echo "\033[32mTudo certo!"
-
-coverage: ## check code coverage quickly with the default Python
-	coverage run --source playerstars_adapters -m pytest
-	coverage report -m
-	coverage html
-	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/playerstars_adapters.rst
@@ -77,13 +70,15 @@ docs: ## generate Sphinx HTML documentation, including API docs
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
-release: dist ## package and upload a release
-	twine upload dist/*
-
-dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
-	ls -l dist
-
 install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+	pip install devpi-client
+	devpi use $(DEVPI_URL) --always-set-cfg=yes
+	pip install -r requirements_dev.txt
+	pip install -e .
+
+upload: clean
+	pip install devpi-client
+	devpi use $(DEVPI_URL) --always-set-cfg=yes
+	devpi login $(DEVPI_USER) --password=$(DEVPI_PASSWORD)
+	python setup.py bdist_wheel
+	devpi upload --from-dir dist/

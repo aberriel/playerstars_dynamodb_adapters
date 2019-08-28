@@ -14,5 +14,5 @@ from tests.basic_adapter_utils import (
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_purchase_history_adapter(mock1, mock2, mock3):
-    adapter = PurchaseHistoryAdapter()
+    adapter = PurchaseHistoryAdapter('purchaseHistory')
     assert adapter

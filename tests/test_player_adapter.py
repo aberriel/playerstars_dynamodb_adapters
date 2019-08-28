@@ -11,7 +11,7 @@ from playerstars_domain import Player, User, Console
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_player_adapter(mock1, mock2, mock3):
-    adapter = PlayerAdapter()
+    adapter = PlayerAdapter('player')
     assert adapter
 
 
@@ -64,7 +64,7 @@ def make_mock_player_table():
 @patch(Patches.GET_TABLE, return_value=make_mock_player_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_player_get(mock, mock1, mock2):
-    adapter = PlayerAdapter()
+    adapter = PlayerAdapter('player')
     result = adapter.get_by_id('id1')
     assert isinstance(result, Player)
     assert result.entity_id == "25f86cd2-713e-4aff-8482-82b8fa606423"
@@ -137,7 +137,7 @@ console1 = Console(
 @patch(Patches.GET_TABLE, return_value=make_mock_player_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_player_save(mock, mock1, mock2):
-    adapter = PlayerAdapter()
+    adapter = PlayerAdapter('player')
     entity = Player(
         user=user1,
         consoles=[console1],

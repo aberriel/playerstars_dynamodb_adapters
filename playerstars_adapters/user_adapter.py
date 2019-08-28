@@ -3,7 +3,5 @@ from playerstars_domain import User
 
 
 class UserAdapter(BasicDynamodbAdapter):
-    __table_name__ = 'User'
-
-    def __init__(self):
-        super(UserAdapter, self).__init__(self.__table_name__, User)
+    def __init__(self, table_name):
+        super(UserAdapter, self).__init__(table_name, User)

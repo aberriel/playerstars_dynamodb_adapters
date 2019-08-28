@@ -72,7 +72,7 @@ servedocs: docs ## compile the docs watching for changes
 
 install: clean ## install the package to the active Python's site-packages
 	pip install devpi-client
-	devpi use $(DEVPI_URL)
+	devpi use $(DEVPI_URL) --always-set-cfg=yes
 	pip install -r requirements_dev.txt
 	pip install -e .
 

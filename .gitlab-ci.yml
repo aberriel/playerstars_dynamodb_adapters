@@ -17,18 +17,12 @@ stages:
     DEVPI_USER: $DEVPI_USER
     DEVPI_PASSWORD: $DEVPI_PASSWORD
   script:
-    - pip install devpi-client
-    - devpi use $DEVPI_URL --always-set-cfg=yes
-    - devpi login $DEVPI_USER --password=$DEVPI_PASSWORD
-    - python setup.py bdist_wheel
-    - devpi upload --from-dir dist/
+    - make upload
 
 .test:
   extends: .utf8-env
   stage: test
   script:
-    - pip install devpi-client
-    - devpi use $DEVPI_URL --always-set-cfg=yes
     - make install
     - make tests
   coverage: /\d+\%\s*$/

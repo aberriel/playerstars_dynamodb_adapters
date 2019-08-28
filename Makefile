@@ -1,3 +1,5 @@
+DEVPI_URL ?= https://devpi.qa.stormsec.com.br/deploy/dev/+simple
+
 .PHONY: clean clean-test clean-pyc clean-build docs help tests
 .DEFAULT_GOAL := help
 
@@ -70,6 +72,13 @@ servedocs: docs ## compile the docs watching for changes
 
 install: clean ## install the package to the active Python's site-packages
 	pip install devpi-client
-	devpi use https://devpi.qa.stormsec.com.br/deploy/dev/+simple
+	devpi use $(DEVPI_URL)
 	pip install -r requirements_dev.txt
 	pip install -e .
+
+upload: clean
+	pip install devpi-client
+	devpi use $(DEVPI_URL) --always-set-cfg=yes
+	devpi login $(DEVPI_USER) --password=$(DEVPI_PASSWORD)
+	python setup.py bdist_wheel
+	devpi upload --from-dir dist/

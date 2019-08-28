@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from datetime import datetime
 from unittest.mock import patch, MagicMock
 from playerstars_adapters import PlayerAdapter

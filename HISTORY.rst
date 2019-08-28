@@ -2,7 +2,14 @@
 History
 =======
 
-0.1.0 (2019-07-16)
+0.1.0 (2019-08-27)
 ------------------
 
-* First release on PyPI.
+* Primeiro release no devpi.qa.stormsec.com.br
+
+
+
+(2019-07-16)
+------------------
+
+* Início do desenvolvimento

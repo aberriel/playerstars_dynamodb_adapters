@@ -53,7 +53,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 tests:
-	@python3 -m pytest -s -v --cov=tests --cov=playerstars_adapters -W ignore::DeprecationWarning --cov-report html --cov-report term-missing:skip-covered
+	@python3 -m pytest -s -vv --cov=tests --cov=playerstars_adapters -W ignore::DeprecationWarning --cov-report html --cov-report term-missing:skip-covered
 	@echo "Linting..."
 	@flake8 playerstars_adapters/ --max-complexity=5
 	@flake8 tests/ --ignore=S101,S311,F811

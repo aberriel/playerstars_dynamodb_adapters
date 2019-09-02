@@ -101,7 +101,6 @@ def player_dict_expected(player_id, user_id):
         "player_status": "OFFLINE",
         "golden_star_balance": 123,
         "blue_star_balance": 321,
-        "games": [],
         "favorites": [],
         "countries_regions": [],
         "states_regions": []

@@ -16,22 +16,28 @@ def test_player_adapter(mock1, mock2, mock3):
 
 
 player_dict_from_db = {
-    "consoles": [{
-        "name": "PS 4",
-        "entity_id": "1",
-        "logo_path": "/images/ps4.png",
-        "tag_name": "007"
-    }, {
-        "name": "Xbox",
-        "entity_id": "11",
-        "logo_path": "/images/xbox.png",
-        "tag_name": "mario"
-    }],
+    "consoles":
+    [
+        {
+            "name": "PS 4",
+            "entity_id": "1",
+            "logo_path": "/images/ps4.png",
+            "tag_name": "007"
+        },
+        {
+            "name": "Xbox",
+            "entity_id": "11",
+            "logo_path": "/images/xbox.png",
+            "tag_name": "mario"
+        }
+    ],
+    "star_transactions": [],
     "entity_id": "25f86cd2-713e-4aff-8482-82b8fa606423",
-    "user": {
+    "user":
+    {
         "date_birth": "1986-12-16",
         "country": "Brasil",
-        "address": "Rua José de Figueiredo 192, Blocos 29, 30 - "
+        "address": "Rua Jose de Figueiredo 192, Blocos 29, 30 - "
                    "Barra da Tijuca",
         "city": "Rio de Janeiro",
         "entity_id": "a0a01572-6a94-4618-8a71-1693fdbbbe23",
@@ -73,18 +79,22 @@ def test_player_get(mock, mock1, mock2):
 
 def player_dict_expected(player_id, user_id):
     return {
-        "consoles": [{
-            "name": "Atari",
-            "entity_id": "123",
-            "logo_path": "teste/img.png",
-            "tag_name": "nick#1",
-            "games": []
-        }],
+        "consoles":
+        [
+            {
+                "name": "Atari",
+                "entity_id": "123",
+                "logo_path": "teste/img.png",
+                "tag_name": "nick#1",
+                "games": []
+            }
+        ],
         "entity_id": player_id,
-        "user": {
+        "user":
+        {
             "date_birth": "1987-02-01T00:00:00",
             "country": "Brasil",
-            "address": "Rua José de Figueiredo 192, Blocos 29, 30 - "
+            "address": "Rua Jose de Figueiredo 192, Blocos 29, 30 - "
                        "Barra da Tijuca",
             "city": "Rio de Janeiro",
             "entity_id": user_id,
@@ -103,7 +113,8 @@ def player_dict_expected(player_id, user_id):
         "blue_star_balance": 321,
         "favorites": [],
         "countries_regions": [],
-        "states_regions": []
+        "states_regions": [],
+        "star_transactions": []
     }
 
 
@@ -112,7 +123,7 @@ user1 = User(
     email='menoti@hotmail.com',
     group='player',
     date_birth=datetime(1987, 2, 1),
-    address='Rua José de Figueiredo 192, Blocos 29, 30 - Barra da Tijuca',
+    address='Rua Jose de Figueiredo 192, Blocos 29, 30 - Barra da Tijuca',
     city='Rio de Janeiro',
     state='Rio de Janeiro',
     country='Brasil',
@@ -142,7 +153,8 @@ def test_player_save(mock, mock1, mock2):
         consoles=[console1],
         favorites=[],
         blue_star_balance=321,
-        golden_star_balance=123
+        golden_star_balance=123,
+        star_transactions=[]
     )
     entity.set_adapter(adapter)
     user_id = entity.user.entity_id

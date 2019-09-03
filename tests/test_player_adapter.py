@@ -153,7 +153,8 @@ def test_player_save(mock, mock1, mock2):
         consoles=[console1],
         favorites=[],
         blue_star_balance=321,
-        golden_star_balance=123
+        golden_star_balance=123,
+        star_transactions=[]
     )
     entity.set_adapter(adapter)
     user_id = entity.user.entity_id

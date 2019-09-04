@@ -23,7 +23,7 @@ stages:
   extends: .utf8-env
   stage: test
   script:
-    - make install
+    - make install_dev
     - make tests
   coverage: /\d+\%\s*$/
 

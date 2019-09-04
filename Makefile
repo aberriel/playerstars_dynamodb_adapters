@@ -1,6 +1,6 @@
 DEVPI_URL ?= https://devpi.qa.stormsec.com.br/deploy/dev/+simple
 
-.PHONY: clean clean-test clean-pyc clean-build docs help tests
+.PHONY: clean clean-test clean-pyc clean-build docs help tests uninstall_all install install_dev
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -30,6 +30,21 @@ BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+
+define UNINSTALL_ALL_PYSCRIPT
+import os
+from requirements import requirements
+
+for package in [x.split('==')[0] for x in requirements]:
+	print('package')
+	if package.strip():
+		os.system('pip uninstall --yes %s' % package)
+endef
+
+export UNINSTALL_ALL_PYSCRIPT
+
+uninstall_all:
+	@python -c "$$UNINSTALL_ALL_PYSCRIPT"
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
@@ -70,10 +85,12 @@ docs: ## generate Sphinx HTML documentation, including API docs
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
-install: clean ## install the package to the active Python's site-packages
+install_dev: install
+	pip install -r requirements_dev.txt
+
+install: clean  uninstall_all  ## install the package to the active Python's site-packages
 	pip install devpi-client
 	devpi use $(DEVPI_URL) --always-set-cfg=yes
-	pip install -r requirements_dev.txt
 	pip install -e .
 
 upload: clean

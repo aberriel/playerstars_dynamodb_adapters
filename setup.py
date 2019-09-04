@@ -2,21 +2,13 @@
 """The setup script."""
 
 from setuptools import setup, find_packages
+from requirements import *
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
-
-requirements = [
-    'playerstars-domain==0.1.2',
-    'boto3==1.9.190',
-]
-
-setup_requirements = []
-
-test_requirements = ['pytest', ]
 
 setup(
     author="Storm Development Ltda",

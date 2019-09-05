@@ -15,7 +15,7 @@ from tests.basic_adapter_utils import (
 @patch(Patches.GET_TABLE, return_value=MagicMock)  # _table
 @patch.object(Adapter, '_create_table_if_dont_exists')
 def test_get_db(mock, mgt, mocked_resource):
-    adapter = Adapter('tbl_adapter')
+    adapter = Adapter('tbl_adapter', 'localhost-db')
     db = adapter.get_db()
     assert db == 'ok'
 
@@ -26,7 +26,7 @@ def test_get_db(mock, mgt, mocked_resource):
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 @patch.object(Adapter, '_create_table_if_dont_exists')
 def test_do_table_exists(mock0, mock1, mock2, moack3):
-    adapter = Adapter('tbl1')
+    adapter = Adapter('tbl1', 'localhost-db')
     assert adapter._do_table_exists()
 
 
@@ -36,7 +36,7 @@ def test_do_table_exists(mock0, mock1, mock2, moack3):
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 @patch.object(Adapter, '_create_table_if_dont_exists')
 def test_do_table_not_exists(mock0, mock1, mock2, mock3):
-    adapter = Adapter('tblX')
+    adapter = Adapter('tblX', 'localhost-db')
 
     assert not adapter._do_table_exists()
 
@@ -46,7 +46,7 @@ def test_do_table_not_exists(mock0, mock1, mock2, mock3):
 @patch(Patches.GET_TABLE)
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_create_table_if_not_exists(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
 
     assert not adapter._do_table_exists()
     adapter._create_table_if_dont_exists()
@@ -57,7 +57,7 @@ def test_create_table_if_not_exists(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_list_all(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
 
     result = adapter.list_all()
 
@@ -70,7 +70,7 @@ def test_list_all(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE)
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_delete(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
 
     result = adapter.delete('id1')
 
@@ -82,7 +82,7 @@ def test_delete(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_delete_raises(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
     result = adapter.delete('id1')
     assert result is None
 
@@ -92,7 +92,7 @@ def test_delete_raises(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_get_by_id(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
 
     result = adapter.get_by_id('id1')
 
@@ -105,7 +105,7 @@ def test_get_by_id(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_get_by_id_not_found(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
 
     result = adapter.get_by_id('id2')
 
@@ -117,7 +117,7 @@ def test_get_by_id_not_found(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_save(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
     entity = Entity('id1', 'nome1')
     entity.set_adapter(adapter)
     saved_id = entity.save()
@@ -134,7 +134,7 @@ def test_save(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_filter(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
 
     adapter.filter(id__eq='id1', nome__eq='eu mesmo')
 
@@ -146,7 +146,7 @@ def test_filter(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_filter_invalid_operator(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
 
     with pytest.raises(ValueError) as excinfo:
         adapter.filter(id__invalid='id1')
@@ -159,7 +159,7 @@ def test_filter_invalid_operator(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_filter_no_conditions(mock1, mock2, mock3):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
 
     with pytest.raises(ValueError) as excinfo:
         adapter.filter()
@@ -171,7 +171,7 @@ def test_filter_no_conditions(mock1, mock2, mock3):
 @patch('boto3.resource')
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_get_table(mock1, mock2):
-    adapter = Adapter('tbl3')
+    adapter = Adapter('tbl3', 'localhost-db')
     assert adapter.get_table()
 
 

@@ -7,14 +7,15 @@ from botocore.exceptions import ClientError
 
 
 class BasicDynamodbAdapter:
-    def __init__(self, table_name, adapted_class, logger=None):
+    def __init__(self, table_name, db_endpoint, adapted_class, logger=None):
         """
         Adapter para persistencia de um entity
         :param table_name: Nome da tabela à ser usada
         """
         self._table_name = table_name
         self._class = adapted_class
-        self._db = BasicDynamodbAdapter.get_db()
+        self._db_endpoint = db_endpoint
+        self._db = self.get_db()
         self._table = self.get_table()
         self._logger = logger if logger else logging.getLogger(table_name)
 
@@ -25,7 +26,8 @@ class BasicDynamodbAdapter:
         return self._logger
 
     def _do_table_exists(self):
-        existing_tables = boto3.client('dynamodb').list_tables()
+        existing_tables = boto3.client(
+            'dynamodb', endpoint_url=self._db_endpoint).list_tables()
         return self._table_name in existing_tables['TableNames']
 
     def _create_table_if_dont_exists(self):
@@ -56,9 +58,8 @@ class BasicDynamodbAdapter:
             table.meta.client.get_waiter('table_exists').wait(
                 TableName=self._table_name)
 
-    @staticmethod
-    def get_db():
-        return boto3.resource('dynamodb')
+    def get_db(self):
+        return boto3.resource('dynamodb', endpoint_url=self._db_endpoint)
 
     def get_table(self):
         return self._db.Table(self._table_name)

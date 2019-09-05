@@ -9,7 +9,7 @@ from tests.basic_adapter_utils import (
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_country_region_adapter(mock1, mock2, mock3):
-    adapter = CountryRegionAdapter('CountryRegion')
+    adapter = CountryRegionAdapter('CountryRegion', 'localhost-db')
     assert adapter
 
 
@@ -18,5 +18,5 @@ def test_country_region_adapter(mock1, mock2, mock3):
 @patch(Patches.GET_TABLE, return_value=make_mock_table())
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
 def test_state_region_adapter(mock1, mock2, mock3):
-    adapter = StateRegionAdapter('stateregion')
+    adapter = StateRegionAdapter('Stateregion', 'localhost-db')
     assert adapter

@@ -27,8 +27,8 @@ class Entity(BasicEntity):
 
 
 class Adapter(BasicDynamodbAdapter):
-    def __init__(self, table_name):
-        super(Adapter, self).__init__(table_name, Entity)
+    def __init__(self, table_name, db_enpoint):
+        super(Adapter, self).__init__(table_name, db_enpoint, Entity)
 
 
 def raise_if_empty(arg):

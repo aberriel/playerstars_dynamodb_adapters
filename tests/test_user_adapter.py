@@ -35,7 +35,6 @@ def user_dict_expected(user_id):
         "state": "Rio de Janeiro",
         "postal_code": "90210",
         "email": "menoti@hotmail.com",
-        "group": "player",
         "profile_image": None
     }
 
@@ -49,7 +48,6 @@ def test_player_save(mock, mock1, mock2):
     entity = User(
         name='Pablinho',
         email='menoti@hotmail.com',
-        group='player',
         date_birth=datetime(1987, 1, 1),
         address='Rua José de Figueiredo 192, Blocos 29, 30 - Barra da Tijuca',
         city='Rio de Janeiro',

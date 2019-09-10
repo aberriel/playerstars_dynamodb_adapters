@@ -47,8 +47,7 @@ player_dict_from_db = {
         "phone_number": "(21) 99663-6963",
         "state": "Rio de Janeiro",
         "postal_code": "22333-000",
-        "email": "playerstars@playerstars.com.br",
-        "group": "player"
+        "email": "playerstars@playerstars.com.br"
     },
     "player_status": "OFFLINE",
     "golden_star_balance": 123,
@@ -105,7 +104,6 @@ def player_dict_expected(player_id, user_id):
             "state": "Rio de Janeiro",
             "postal_code": "90210",
             "email": "menoti@hotmail.com",
-            "group": "player",
             "profile_image": None
         },
         "player_status": "OFFLINE",
@@ -121,7 +119,6 @@ def player_dict_expected(player_id, user_id):
 user1 = User(
     name='Pablinho',
     email='menoti@hotmail.com',
-    group='player',
     date_birth=datetime(1987, 2, 1),
     address='Rua Jose de Figueiredo 192, Blocos 29, 30 - Barra da Tijuca',
     city='Rio de Janeiro',

@@ -11,9 +11,17 @@ from .player_adapter import PlayerAdapter
 from .region_country_adapter import CountryRegionAdapter
 from .region_state_adapter import StateRegionAdapter
 from .team_adapter import TeamAdapter
-from .user_adapter import UserAdapter
 from .user_admin_adapter import UserAdminAdapter
+from .product_adapter import ProductAdapter
 
-__all__ = ['BasicDynamodbAdapter', 'ConsoleAdapter', 'UserAdapter',
-           'PlayerAdapter', 'CountryRegionAdapter', 'StateRegionAdapter',
-           'TeamAdapter', 'UserAdminAdapter', 'DuelAdapter']
+__all__ = [
+    'BasicDynamodbAdapter',
+    'ConsoleAdapter',
+    'PlayerAdapter',
+    'CountryRegionAdapter',
+    'StateRegionAdapter',
+    'TeamAdapter',
+    'UserAdminAdapter',
+    'DuelAdapter',
+    'ProductAdapter'
+]

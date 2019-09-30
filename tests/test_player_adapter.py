@@ -40,7 +40,6 @@ player_dict_from_db = {
         "address": "Rua Jose de Figueiredo 192, Blocos 29, 30 - "
                    "Barra da Tijuca",
         "city": "Rio de Janeiro",
-        "entity_id": "a0a01572-6a94-4618-8a71-1693fdbbbe23",
         "nickname": "anselmo.lira",
         "cpf": "123.456.789-00",
         "name": "Anselmo Lira",
@@ -73,10 +72,9 @@ def test_player_get(mock, mock1, mock2):
     result = adapter.get_by_id('id1')
     assert isinstance(result, Player)
     assert result.entity_id == "25f86cd2-713e-4aff-8482-82b8fa606423"
-    assert result.user.entity_id == "a0a01572-6a94-4618-8a71-1693fdbbbe23"
 
 
-def player_dict_expected(player_id, user_id):
+def player_dict_expected(player_id):
     return {
         "consoles":
         [
@@ -96,7 +94,6 @@ def player_dict_expected(player_id, user_id):
             "address": "Rua Jose de Figueiredo 192, Blocos 29, 30 - "
                        "Barra da Tijuca",
             "city": "Rio de Janeiro",
-            "entity_id": user_id,
             "nickname": "zyzukab",
             "cpf": "123.456.789-01",
             "name": "Pablinho",
@@ -112,7 +109,9 @@ def player_dict_expected(player_id, user_id):
         "favorites": [],
         "countries_regions": [],
         "states_regions": [],
-        "star_transactions": []
+        "star_transactions": [],
+        "points": 0,
+        "purchases": []
     }
 
 
@@ -126,7 +125,6 @@ user1 = User(
     country='Brasil',
     postal_code='90210',
     phone_number='5555-4321',
-    entity_id='1234',
     nickname='zyzukab',
     cpf='123.456.789-01'
 )
@@ -153,8 +151,7 @@ def test_player_save(mock, mock1, mock2):
         golden_star_balance=123
     )
     entity.set_adapter(adapter)
-    user_id = entity.user.entity_id
     saved_id = entity.save()
     assert saved_id
     assert entity.to_json()['user']['date_birth']
-    assert entity.to_json() == player_dict_expected(saved_id, user_id)
+    assert entity.to_json() == player_dict_expected(saved_id)

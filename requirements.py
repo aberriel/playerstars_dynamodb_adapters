@@ -1,5 +1,5 @@
 requirements = [
-    'playerstars-domain==0.1.2',
+    'playerstars-domain',
     'boto3==1.9.190',
 ]
 

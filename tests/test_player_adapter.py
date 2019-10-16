@@ -50,7 +50,37 @@ player_dict_from_db = {
     },
     "player_status": "OFFLINE",
     "golden_star_balance": 123,
-    "blue_star_balance": 321
+    "blue_star_balance": 321,
+    "countries_regions": [
+        {
+            "minimum_bet": 2,
+            "name": "América Latina",
+            "countries": ["Brasil", "Argentina", "Chile"],
+            "entity_id": "bff41488-bef6-49f6-a258-f1ebff93be78"
+        },
+        {
+            "entity_id": "4d865d83-46ae-4132-88c4-aa4f67270383",
+            "name": "América do Norte",
+            "countries": ["Estados Unidos", "Canadá"],
+            "minimum_bet": 10
+        }
+    ],
+    "states_regions": [
+        {
+            "name": "Brasil Sudeste",
+            "minimum_bet": 3,
+            "states": ["Rio de Janeiro", "Minas Gerais", "São Paulo"],
+            "entity_id": "02ee1fb8-ad13-4c29-b06c-bbecabf72465"
+        },
+        {
+            "entity_id": "487ccfaa-da06-43a5-96d8-d7a186081ab8",
+            "name": "Brasil Sul",
+            "minimum_bet": 5,
+            "states": ["Paraná", "Santa Catarina", "Rio Grande do Sul"]
+        }
+    ],
+    "favorites": [],
+    "points": 30
 }
 
 
@@ -89,7 +119,7 @@ def player_dict_expected(player_id):
         "entity_id": player_id,
         "user":
         {
-            "date_birth": "1987-02-01T00:00:00",
+            "date_birth": "1987-02-01",
             "country": "Brasil",
             "address": "Rua Jose de Figueiredo 192, Blocos 29, 30 - "
                        "Barra da Tijuca",
@@ -110,7 +140,7 @@ def player_dict_expected(player_id):
         "countries_regions": [],
         "states_regions": [],
         "star_transactions": [],
-        "points": 0,
+        "points": 30,
         "purchases": []
     }
 
@@ -148,7 +178,8 @@ def test_player_save(mock, mock1, mock2):
         consoles=[console1],
         favorites=[],
         blue_star_balance=321,
-        golden_star_balance=123
+        golden_star_balance=123,
+        points=30
     )
     entity.set_adapter(adapter)
     saved_id = entity.save()

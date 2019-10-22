@@ -80,7 +80,8 @@ player_dict_from_db = {
         }
     ],
     "favorites": [],
-    "points": 30
+    "points": 30,
+    "terms": True
 }
 
 
@@ -141,7 +142,8 @@ def player_dict_expected(player_id):
         "states_regions": [],
         "star_transactions": [],
         "points": 30,
-        "purchases": []
+        "purchases": [],
+        "terms": False
     }
 
 

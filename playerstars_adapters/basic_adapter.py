@@ -122,8 +122,10 @@ class BasicDynamodbAdapter:
     def save(self, json_data):
         entity_id = json_data.get('entity_id', str(uuid4()))
         json_data.update(dict(entity_id=entity_id))
-        self.logger.info('Saving entity with data: {}'.format(json_data))
+        self.logger.info('Data received to save: {}'.format(json_data))
         clean_data = BasicDynamodbAdapter._remove_empties(json_data)
+        self.logger.info('Saving after remove empties '
+                         'entity with data : {}'.format(json_data))
         self._table.put_item(Item=clean_data)
         return entity_id
 

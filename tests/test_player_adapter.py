@@ -37,8 +37,10 @@ player_dict_from_db = {
     {
         "date_birth": "1986-12-16",
         "country": "Brasil",
-        "address": "Rua Jose de Figueiredo 192, Blocos 29, 30 - "
-                   "Barra da Tijuca",
+        "street": 'Avenida Brasil',
+        "street_number": '500',
+        "street_complement": 'apt 607',
+        "neighborhood": 'pechinchão',
         "city": "Rio de Janeiro",
         "nickname": "anselmo.lira",
         "cpf": "123.456.789-00",
@@ -122,8 +124,10 @@ def player_dict_expected(player_id):
         {
             "date_birth": "1987-02-01",
             "country": "Brasil",
-            "address": "Rua Jose de Figueiredo 192, Blocos 29, 30 - "
-                       "Barra da Tijuca",
+            "street": 'Avenida Brasil',
+            "street_number": '500',
+            "street_complement": 'apt 607',
+            "neighborhood": 'pechinchão',
             "city": "Rio de Janeiro",
             "nickname": "zyzukab",
             "cpf": "123.456.789-01",
@@ -151,7 +155,10 @@ user1 = User(
     name='Pablinho',
     email='menoti@hotmail.com',
     date_birth=datetime(1987, 2, 1),
-    address='Rua Jose de Figueiredo 192, Blocos 29, 30 - Barra da Tijuca',
+    street='Avenida Brasil',
+    street_number='500',
+    street_complement='apt 607',
+    neighborhood='pechinchão',
     city='Rio de Janeiro',
     state='Rio de Janeiro',
     country='Brasil',

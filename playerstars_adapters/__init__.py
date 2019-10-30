@@ -8,6 +8,7 @@ from .region_country_adapter import CountryRegionAdapter
 from .region_state_adapter import StateRegionAdapter
 from .team_adapter import TeamAdapter
 from .user_admin_adapter import UserAdminAdapter
+from .notification_adapter import NotificationAdapter
 
 __all__ = [
     'BasicDynamodbAdapter',
@@ -19,5 +20,6 @@ __all__ = [
     'ProductAdapter',
     'StateRegionAdapter',
     'TeamAdapter',
-    'UserAdminAdapter'
+    'UserAdminAdapter',
+    'NotificationAdapter'
 ]

@@ -9,6 +9,7 @@ from .region_state_adapter import StateRegionAdapter
 from .team_adapter import TeamAdapter
 from .user_admin_adapter import UserAdminAdapter
 from .notification_adapter import NotificationAdapter
+from .convert_star_rate_adapter import ConvertStarRateAdapter
 
 __all__ = [
     'BasicDynamodbAdapter',
@@ -21,5 +22,6 @@ __all__ = [
     'StateRegionAdapter',
     'TeamAdapter',
     'UserAdminAdapter',
-    'NotificationAdapter'
+    'NotificationAdapter',
+    'ConvertStarRateAdapter'
 ]

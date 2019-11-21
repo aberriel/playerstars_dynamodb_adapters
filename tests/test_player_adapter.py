@@ -144,6 +144,7 @@ def player_dict_expected(player_id):
         "favorites": [],
         "countries_regions": [],
         "states_regions": [],
+        "star_reservations": [],
         "star_transactions": [],
         "points": 30,
         "purchases": [],

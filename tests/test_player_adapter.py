@@ -148,7 +148,9 @@ def player_dict_expected(player_id):
         "star_transactions": [],
         "points": 30,
         "purchases": [],
-        "terms": False
+        "terms": False,
+        "is_blocked": False,
+        "is_admin": False
     }
 
 

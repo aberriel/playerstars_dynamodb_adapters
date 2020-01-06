@@ -119,7 +119,8 @@ class BasicDynamodbAdapter:
         else:
             return None
 
-    def save(self, json_data):
+    def save(self, object_data):
+        json_data = object_data.to_json()
         entity_id = json_data.get('entity_id', str(uuid4()))
         json_data.update(dict(entity_id=entity_id))
         self.logger.info('Data received to save: {}'.format(json_data))

@@ -1,9 +1,9 @@
-import logging
+from boto3.dynamodb.conditions import Attr
+from botocore.exceptions import ClientError
 from uuid import uuid4
 
 import boto3
-from boto3.dynamodb.conditions import Attr
-from botocore.exceptions import ClientError
+import logging
 
 
 class BasicDynamodbAdapter:
@@ -119,7 +119,9 @@ class BasicDynamodbAdapter:
         else:
             return None
 
-    def save(self, json_data):
+    def save(self, object_to_save,
+             exec_update=False):
+        json_data = object_to_save.to_json()
         entity_id = json_data.get('entity_id', str(uuid4()))
         json_data.update(dict(entity_id=entity_id))
         self.logger.info('Data received to save: {}'.format(json_data))

@@ -1,9 +1,7 @@
-from unittest.mock import MagicMock
-
-from playerstars_domain import BasicEntity
 from botocore.exceptions import ClientError
-
 from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
+from playerstars_domain import BasicEntity
+from unittest.mock import MagicMock
 
 
 class Patches:

@@ -52,7 +52,7 @@ player_dict_from_db = {
     },
     "player_status": "OFFLINE",
     "golden_star_balance": 123,
-    "blue_star_balance": 321,
+    "red_star_balance": 321,
     "countries_regions": [
         {
             "minimum_bet": 2,
@@ -140,7 +140,7 @@ def player_dict_expected(player_id):
         },
         "player_status": "OFFLINE",
         "golden_star_balance": 123,
-        "blue_star_balance": 321,
+        "red_star_balance": 321,
         "favorites": [],
         "countries_regions": [],
         "states_regions": [],
@@ -189,7 +189,7 @@ def test_player_save(mock, mock1, mock2):
         user=user1,
         consoles=[console1],
         favorites=[],
-        blue_star_balance=321,
+        red_star_balance=321,
         golden_star_balance=123,
         points=30
     )

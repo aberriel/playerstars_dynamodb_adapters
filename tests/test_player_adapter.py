@@ -3,7 +3,8 @@ from unittest.mock import patch, MagicMock
 from playerstars_adapters import PlayerAdapter
 from tests.basic_adapter_utils import (
     make_mock_client, make_mock_table, Patches)
-from playerstars_domain import Player, User, Console
+from playerstars_domain import \
+    Player, User, Console, PlayerConsoles, GamePoints
 
 
 # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
@@ -19,16 +20,11 @@ player_dict_from_db = {
     "consoles":
     [
         {
-            "name": "PS 4",
-            "entity_id": "1",
-            "logo_path": "/images/ps4.png",
-            "tag_name": "007"
-        },
-        {
-            "name": "Xbox",
-            "entity_id": "11",
-            "logo_path": "/images/xbox.png",
-            "tag_name": "mario"
+            "console_id": "123",
+            "game_points": [{
+                "game_id": '321',
+                "victories": 100
+            }]
         }
     ],
     "star_transactions": [],
@@ -53,34 +49,10 @@ player_dict_from_db = {
     "player_status": "OFFLINE",
     "golden_star_balance": 123,
     "red_star_balance": 321,
-    "countries_regions": [
-        {
-            "minimum_bet": 2,
-            "name": "América Latina",
-            "countries": ["Brasil", "Argentina", "Chile"],
-            "entity_id": "bff41488-bef6-49f6-a258-f1ebff93be78"
-        },
-        {
-            "entity_id": "4d865d83-46ae-4132-88c4-aa4f67270383",
-            "name": "América do Norte",
-            "countries": ["Estados Unidos", "Canadá"],
-            "minimum_bet": 10
-        }
-    ],
-    "states_regions": [
-        {
-            "name": "Brasil Sudeste",
-            "minimum_bet": 3,
-            "states": ["Rio de Janeiro", "Minas Gerais", "São Paulo"],
-            "entity_id": "02ee1fb8-ad13-4c29-b06c-bbecabf72465"
-        },
-        {
-            "entity_id": "487ccfaa-da06-43a5-96d8-d7a186081ab8",
-            "name": "Brasil Sul",
-            "minimum_bet": 5,
-            "states": ["Paraná", "Santa Catarina", "Rio Grande do Sul"]
-        }
-    ],
+    "countries_regions": ["bff41488-bef6-49f6-a258-f1ebff93be78",
+                          "4d865d83-46ae-4132-88c4-aa4f67270383"],
+    "states_regions": ["02ee1fb8-ad13-4c29-b06c-bbecabf72465",
+                       "487ccfaa-da06-43a5-96d8-d7a186081ab8"],
     "favorites": [],
     "points": 30,
     "terms": True
@@ -112,11 +84,11 @@ def player_dict_expected(player_id):
         "consoles":
         [
             {
-                "name": "Atari",
-                "entity_id": "123",
-                "logo_path": "teste/img.png",
-                "tag_name": "nick#1",
-                "games": []
+                "console_id": "123",
+                "game_points": [{
+                    "game_id": '321',
+                    "victories": 100
+                }]
             }
         ],
         "entity_id": player_id,
@@ -187,7 +159,7 @@ def test_player_save(mock, mock1, mock2):
     adapter = PlayerAdapter('player', 'localhost-db')
     entity = Player(
         user=user1,
-        consoles=[console1],
+        consoles=[PlayerConsoles('123', [GamePoints("321", 100)])],
         favorites=[],
         red_star_balance=321,
         golden_star_balance=123,

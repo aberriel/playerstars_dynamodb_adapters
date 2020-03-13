@@ -85,6 +85,7 @@ def player_dict_expected(player_id):
         [
             {
                 "console_id": "123",
+                "tag_name": "lol",
                 "game_points": [{
                     "game_id": '321',
                     "victories": 100
@@ -159,7 +160,10 @@ def test_player_save(mock, mock1, mock2):
     adapter = PlayerAdapter('player', 'localhost-db')
     entity = Player(
         user=user1,
-        consoles=[PlayerConsoles('123', [GamePoints("321", 100)])],
+        consoles=[PlayerConsoles(
+            console_id='123',
+            tag_name='lol',
+            game_points=[GamePoints("321", 100)])],
         favorites=[],
         red_star_balance=321,
         golden_star_balance=123,

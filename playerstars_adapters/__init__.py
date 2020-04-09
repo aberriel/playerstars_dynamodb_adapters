@@ -10,6 +10,7 @@ from .team_adapter import TeamAdapter
 from .user_admin_adapter import UserAdminAdapter
 from .notification_adapter import NotificationAdapter
 from .convert_star_rate_adapter import ConvertStarRateAdapter
+from .values_adapter import ValuesAdapter
 
 __all__ = [
     'BasicDynamodbAdapter',
@@ -23,5 +24,6 @@ __all__ = [
     'TeamAdapter',
     'UserAdminAdapter',
     'NotificationAdapter',
-    'ConvertStarRateAdapter'
+    'ConvertStarRateAdapter',
+    'ValuesAdapter'
 ]

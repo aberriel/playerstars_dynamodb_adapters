@@ -1,7 +1,6 @@
 from unittest.mock import patch, MagicMock
 
 # noinspection PyPackageRequirements
-import pytest
 from pytest import raises
 
 from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
@@ -129,44 +128,6 @@ def test_save(mock1, mock2, mock3):
     mock2.return_value.put_item.assert_called_with(Item=expected)
 
 
-# noinspection PyUnusedLocal,PyUnusedLocal
-@patch('boto3.resource')
-@patch(Patches.GET_TABLE, return_value=make_mock_table())
-@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
-def test_filter(mock1, mock2, mock3):
-    adapter = Adapter('tbl3', 'localhost-db')
-
-    adapter.filter(id__eq='id1', nome__eq='eu mesmo')
-
-    assert mock2.filter.called_once()
-
-
-# noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
-@patch('boto3.resource')
-@patch(Patches.GET_TABLE, return_value=make_mock_table())
-@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
-def test_filter_invalid_operator(mock1, mock2, mock3):
-    adapter = Adapter('tbl3', 'localhost-db')
-
-    with pytest.raises(ValueError) as excinfo:
-        adapter.filter(id__invalid='id1')
-
-    assert 'Comparador inválido' in str(excinfo.value)
-
-
-# noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
-@patch('boto3.resource')
-@patch(Patches.GET_TABLE, return_value=make_mock_table())
-@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
-def test_filter_no_conditions(mock1, mock2, mock3):
-    adapter = Adapter('tbl3', 'localhost-db')
-
-    with pytest.raises(ValueError) as excinfo:
-        adapter.filter()
-
-    assert str(excinfo.value) == 'Nenhuma condição no filtro.'
-
-
 # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
 @patch('boto3.resource')
 @patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
@@ -215,3 +176,89 @@ def test_raise_if_empty_raises_with_dict():
         raise_if_empty(arg)
 
     assert 'Item vazio encontrado' in str(excinfo.value)
+
+
+# noinspection PyUnusedLocal
+@patch('playerstars_adapters.basic_adapter.boto3')
+def test_filter(mock_boto):
+    adapter = BasicDynamodbAdapter('tabela', None, MagicMock(), MagicMock())
+
+    with patch.object(adapter, '_table') as mock:
+        adapter.filter(campo__eq=42, campo2__gt=42)
+
+    mock.scan.assert_called_once()
+
+
+# noinspection PyUnusedLocal
+@patch('playerstars_adapters.basic_adapter.boto3')
+def test_filter_between(mock_boto):
+    adapter = BasicDynamodbAdapter('tabela', None, MagicMock(), MagicMock())
+
+    with patch.object(adapter, '_table') as mock:
+        adapter.filter(campo__between=[40, 50])
+
+    mock.scan.assert_called_once()
+
+
+# noinspection PyUnusedLocal
+@patch('playerstars_adapters.basic_adapter.boto3')
+def test_filter_exists(mock_boto):
+    adapter = BasicDynamodbAdapter('tabela', None, MagicMock(), MagicMock())
+
+    with patch.object(adapter, '_table') as mock:
+        adapter.filter(campo__exists=None)
+
+    mock.scan.assert_called_once()
+
+
+# noinspection PyUnusedLocal
+@patch('playerstars_adapters.basic_adapter.boto3')
+def test_filter_projection(mock_boto):
+    adapter = BasicDynamodbAdapter('tabela', None, MagicMock(), MagicMock())
+
+    with patch.object(adapter, '_table') as mock:
+        adapter.filter(campo__exists=None, ProjectionExpression='campo')
+
+    mock.scan.assert_called_once()
+
+
+# noinspection PyUnusedLocal
+@patch('playerstars_adapters.basic_adapter.boto3')
+def test_filter_invalid_op(mock_boto):
+    adapter = BasicDynamodbAdapter('tabela', None, MagicMock(), MagicMock())
+
+    with patch.object(adapter, '_table'):
+        with raises(ValueError) as excinfo:
+            adapter.filter(campo__oops=42)
+
+    assert 'Comparador inválido: oops' == str(excinfo.value)
+
+
+# noinspection PyUnusedLocal
+@patch('playerstars_adapters.basic_adapter.boto3')
+def test_filter_no_conditions(mock_boto):
+    adapter = BasicDynamodbAdapter('tabela', None, MagicMock(), MagicMock())
+
+    with patch.object(adapter, '_table'):
+        with raises(ValueError) as excinfo:
+            adapter.filter()
+
+    assert 'Nenhuma condição no filtro.' == str(excinfo.value)
+
+
+# noinspection PyUnusedLocal
+@patch('playerstars_adapters.basic_adapter.boto3')
+def test_desserialize(mock_boto3):
+    adapter = BasicDynamodbAdapter('tabela', None, MagicMock(), MagicMock())
+    mock_class = MagicMock(
+        from_json=MagicMock())
+    mock_table = MagicMock(
+        scan=MagicMock(
+            return_value=dict(Items=[1, 2, 3, 4, 5])))
+    with patch.multiple(adapter,
+                        _class=mock_class,
+                        _table=mock_table):
+        result = adapter.filter(field__eq=1)
+
+    for r in result:
+        r.set_adapter.assert_called()

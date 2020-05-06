@@ -1,6 +1,7 @@
 from boto3.dynamodb.conditions import Attr
 from botocore.exceptions import ClientError
 from uuid import uuid4
+from functools import reduce
 
 import boto3
 import logging
@@ -141,6 +142,84 @@ class BasicDynamodbAdapter:
             return None
         return entity_id
 
+    @staticmethod
+    def _get_ops():
+        return {'begins_with': 1,
+                'between': 2,
+                'contains': 1,
+                'eq': 1,
+                'exists': 0,
+                'gt': 1,
+                'gte': 1,
+                'is_in': 1,
+                'lt': 1,
+                'lte': 1,
+                'ne': 1,
+                'not_exists': 0,
+                'size': 0}
+
+    @staticmethod
+    def _args_from_value(value, arg_count):
+        args = []
+        if arg_count == 1:
+            args.append(value)
+        elif arg_count > 1:
+            args.extend(value)
+
+        return args
+
+    @staticmethod
+    def _get_scan_kwargs(filter_cond, kwargs):
+        scan_kwargs = {
+            'FilterExpression': filter_cond
+        }
+        if 'ProjectionExpression' in kwargs:
+            scan_kwargs.update({
+                'ProjectionExpression': kwargs['ProjectionExpression']
+            })
+        else:
+            scan_kwargs.update({
+                'Select': 'ALL_ATTRIBUTES'
+            })
+        return scan_kwargs
+
+    @staticmethod
+    def _get_argcount(op, ops):
+        try:
+            return ops[op]
+        except KeyError:
+            raise ValueError(f'Comparador inválido: {op}')
+
+    @staticmethod
+    def _get_contitions(kwargs):
+        ops = BasicDynamodbAdapter._get_ops()
+        have_projection = False
+        conditions = []
+
+        for k, v in kwargs.items():
+            if k == 'ProjectionExpression':
+                have_projection = True
+                continue
+
+            field, op = k.split('__')
+            arg_count = BasicDynamodbAdapter._get_argcount(op, ops)
+
+            args = BasicDynamodbAdapter._args_from_value(v, arg_count)
+            conditions.append(getattr(Attr(field), op)(*args))
+
+        if not conditions:
+            raise ValueError('Nenhuma condição no filtro.')
+
+        return (have_projection,
+                reduce(lambda accum, curr: accum | curr, conditions),)
+
+    def _desserialize(self, result):
+        objects = [self._class.from_json(x) for x in result]
+        for obj in objects:
+            obj.set_adapter(self)
+
+        return objects
+
     def filter(self, **kwargs):
         """
         Filtra objetos de acordo com o critério especificado.
@@ -158,37 +237,14 @@ class BasicDynamodbAdapter:
 
         :return: Lista de objetos
         """
-        ops = ['begins_with',
-               'between',
-               'contains',
-               'eq',
-               'exists',
-               'gt',
-               'gte',
-               'is_in',
-               'lt',
-               'lte',
-               'ne',
-               'not_exists']
-        conditions = []
-        for k, v in kwargs.items():
-            field, op = k.split('__')
-            if op not in ops:
-                raise ValueError('Comparador inválido: {}'.format(op))
+        have_projection, conditions = self._get_contitions(kwargs)
+        scan_kwargs = self._get_scan_kwargs(conditions, kwargs)
+        result = self._table.scan(**scan_kwargs)['Items']
 
-            conditions.append(getattr(Attr(field), op)(kwargs[k]))
-        if not conditions:
-            raise ValueError('Nenhuma condição no filtro.')
+        if have_projection:
+            return result
 
-        filter_cond = conditions[0]
-
-        for condition in conditions[1:]:
-            filter_cond = filter_cond | condition
-
-        result = self._table.scan(FilterExpression=filter_cond,
-                                  Select='ALL_ATTRIBUTES')
-
-        return [self._class.from_json(x) for x in result['Items']]
+        return self._desserialize(result)
 
     class DynamodbAdapterScanException(BaseException):
         pass

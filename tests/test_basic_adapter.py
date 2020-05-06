@@ -1,7 +1,6 @@
 from unittest.mock import patch, MagicMock
 
 # noinspection PyPackageRequirements
-import pytest
 from pytest import raises
 
 from playerstars_adapters.basic_adapter import BasicDynamodbAdapter

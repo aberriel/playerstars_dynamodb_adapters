@@ -11,6 +11,8 @@ from .user_admin_adapter import UserAdminAdapter
 from .notification_adapter import NotificationAdapter
 from .convert_star_rate_adapter import ConvertStarRateAdapter
 from .values_adapter import ValuesAdapter
+from .terms_adapter import TermsAdapter
+from .privacy_policy_adapter import PrivacyPolicyAdapter
 
 __all__ = [
     'BasicDynamodbAdapter',
@@ -25,5 +27,7 @@ __all__ = [
     'UserAdminAdapter',
     'NotificationAdapter',
     'ConvertStarRateAdapter',
-    'ValuesAdapter'
+    'ValuesAdapter',
+    'TermsAdapter',
+    'PrivacyPolicyAdapter'
 ]

@@ -13,7 +13,7 @@ from .convert_star_rate_adapter import ConvertStarRateAdapter
 from .values_adapter import ValuesAdapter
 from .terms_adapter import TermsAdapter
 from .privacy_policy_adapter import PrivacyPolicyAdapter
-
+from .preduel_adapter import PreDuelAdapter
 __all__ = [
     'BasicDynamodbAdapter',
     'ChampionshipAdapter',
@@ -29,5 +29,6 @@ __all__ = [
     'ConvertStarRateAdapter',
     'ValuesAdapter',
     'TermsAdapter',
-    'PrivacyPolicyAdapter'
+    'PrivacyPolicyAdapter',
+    'PreDuelAdapter'
 ]

@@ -3,6 +3,6 @@ from playerstars_domain import ConvertStarRate
 
 
 class ConvertStarRateAdapter(BasicDynamodbAdapter):
-    def __init__(self, table_name, db_endpoint):
+    def __init__(self, table_name, db_endpoint=None):
         super(ConvertStarRateAdapter, self).__init__(
             table_name, db_endpoint, ConvertStarRate)

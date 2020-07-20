@@ -1,5 +1,6 @@
 from .basic_adapter import BasicDynamodbAdapter
-from .tournament_adapter import TournamentAdapter
+from .team_tournament_adapter import TeamTournamentAdapter
+from .player_tournament_adapter import PlayerTournamentAdapter
 from .console_adapter import ConsoleAdapter
 from .duel_adapter import DuelAdapter
 from .player_adapter import PlayerAdapter
@@ -16,7 +17,8 @@ from .privacy_policy_adapter import PrivacyPolicyAdapter
 from .preduel_adapter import PreDuelAdapter
 __all__ = [
     'BasicDynamodbAdapter',
-    'TournamentAdapter',
+    'TeamTournamentAdapter',
+    'PlayerTournamentAdapter',
     'ConsoleAdapter',
     'CountryRegionAdapter',
     'DuelAdapter',

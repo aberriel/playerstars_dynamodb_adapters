@@ -1,4 +1,4 @@
-from playerstars_adapters import BasicDynamodbAdapter
+from clapy_dynamodb_adapter.basic_dynamodb_adapter import BasicDynamodbAdapter
 from playerstars_domain import Player
 
 

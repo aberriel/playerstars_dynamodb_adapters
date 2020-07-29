@@ -1,4 +1,4 @@
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 from .basic_adapter import BasicDynamodbAdapter
 from .team_tournament_adapter import TeamTournamentAdapter

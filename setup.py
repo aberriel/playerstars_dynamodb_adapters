@@ -32,6 +32,6 @@ setup(
     tests_require=test_requirements,
     url='https://gitlab.com/stormsecurity/internos/playerstars/'
         'playerstars-dynamodb-adapters.git',
-    version='0.1.2',
+    version='0.2.0',
     zip_safe=False,
 )

@@ -60,23 +60,8 @@ player_dict_from_db = {
 
 
 def make_mock_player_table():
-    def mock_get_player(**kwargs):
-        if kwargs['Key']['entity_id'] == 'id1':
-            return dict(Item=player_dict_from_db)
-
-    table_mock = MagicMock(get_item=mock_get_player)
+    table_mock = MagicMock()
     return table_mock
-
-
-# noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
-@patch('boto3.resource')
-@patch(Patches.GET_TABLE, return_value=make_mock_player_table())
-@patch(Patches.BOTO3_CLIENT, return_value=make_mock_client())
-def test_player_get(mock, mock1, mock2):
-    adapter = PlayerAdapter('player', 'localhost-db')
-    result = adapter.get_by_id('id1')
-    assert isinstance(result, Player)
-    assert result.entity_id == "25f86cd2-713e-4aff-8482-82b8fa606423"
 
 
 def player_dict_expected(player_id):

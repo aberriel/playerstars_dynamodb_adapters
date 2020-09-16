@@ -1,6 +1,5 @@
 __version__ = '0.4.0'
 
-from .basic_adapter import BasicDynamodbAdapter
 from .team_tournament_adapter import TeamTournamentAdapter
 from .player_tournament_adapter import PlayerTournamentAdapter
 from .console_adapter import ConsoleAdapter
@@ -18,7 +17,6 @@ from .terms_adapter import TermsAdapter
 from .privacy_policy_adapter import PrivacyPolicyAdapter
 from .preduel_adapter import PreDuelAdapter
 __all__ = [
-    'BasicDynamodbAdapter',
     'TeamTournamentAdapter',
     'PlayerTournamentAdapter',
     'ConsoleAdapter',

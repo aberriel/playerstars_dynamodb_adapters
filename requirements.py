@@ -1,5 +1,5 @@
 requirements = [
-    'playerstars-domain==0.3.2',
+    'playerstars-domain==0.4.0',
     'boto3==1.12.42',
     'clapy-dynamodb-adapter==0.5.0',
 ]

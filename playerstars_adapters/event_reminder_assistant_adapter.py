@@ -4,6 +4,7 @@ from playerstars_domain.event_reminder_assistant import EventReminderAssistant
 
 class EventReminderAssistantAdapter(BasicDynamodbAdapter):
     def __init__(self, table_name, db_endpoint=None):
-        super().__init__(table_name=table_name,
-                         db_endpoint=db_endpoint,
-                         adapted_class=EventReminderAssistant)
+        super().__init__(
+            table_name=table_name,
+            db_endpoint=db_endpoint,
+            adapted_class=EventReminderAssistant)

@@ -16,7 +16,7 @@ from .values_adapter import ValuesAdapter
 from .terms_adapter import TermsAdapter
 from .privacy_policy_adapter import PrivacyPolicyAdapter
 from .preduel_adapter import PreDuelAdapter
-from .event_reminder_assitant_adapter import EventReminderAssistantAdapter
+from .event_reminder_assistant_adapter import EventReminderAssistantAdapter
 __all__ = [
     'TeamTournamentAdapter',
     'PlayerTournamentAdapter',

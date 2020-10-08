@@ -1,4 +1,5 @@
-from .basic_adapter import BasicDynamodbAdapter
+__version__ = '0.4.0'
+
 from .team_tournament_adapter import TeamTournamentAdapter
 from .player_tournament_adapter import PlayerTournamentAdapter
 from .console_adapter import ConsoleAdapter
@@ -17,7 +18,6 @@ from .privacy_policy_adapter import PrivacyPolicyAdapter
 from .preduel_adapter import PreDuelAdapter
 from .event_reminder_assitant_adapter import EventReminderAssistantAdapter
 __all__ = [
-    'BasicDynamodbAdapter',
     'TeamTournamentAdapter',
     'PlayerTournamentAdapter',
     'ConsoleAdapter',

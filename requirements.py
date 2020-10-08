@@ -1,8 +1,7 @@
 requirements = [
-    'playerstars-domain',
-    'boto3==1.9.190',
-    'clapy-basic-classes==0.3.0',
-    'clapy-dynamodb-adapter==0.2.2',
+    'playerstars-domain==0.4.0',
+    'boto3==1.12.42',
+    'clapy-dynamodb-adapter==0.5.0',
 ]
 
 setup_requirements = []

@@ -1,32 +1,11 @@
 from botocore.exceptions import ClientError
-from playerstars_adapters.basic_adapter import BasicDynamodbAdapter
-from playerstars_domain import BasicEntity
 from unittest.mock import MagicMock
 
 
 class Patches:
-    BASE = 'playerstars_adapters.basic_adapter'
+    BASE = 'clapy_dynamodb_adapter.basic_dynamodb_adapter'
     BOTO3_CLIENT = f'{BASE}.boto3.client'
     GET_TABLE = f'{BASE}.BasicDynamodbAdapter.get_table'
-
-
-class Entity(BasicEntity):
-    def __init__(self, entity_id, nome):
-        super(Entity, self).__init__(entity_id)
-        self.nome = nome
-
-    def to_json(self):
-        return dict(entity_id=self.entity_id,
-                    nome=self.nome)
-
-    @classmethod
-    def from_json(cls, json_data):
-        return cls(**json_data)
-
-
-class Adapter(BasicDynamodbAdapter):
-    def __init__(self, table_name, db_enpoint):
-        super(Adapter, self).__init__(table_name, db_enpoint, Entity)
 
 
 def raise_if_empty(arg):

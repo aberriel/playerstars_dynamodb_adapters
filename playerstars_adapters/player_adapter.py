@@ -4,4 +4,7 @@ from playerstars_domain import Player
 
 class PlayerAdapter(BasicDynamodbAdapter):
     def __init__(self, table_name, db_endpoint=None):
-        super(PlayerAdapter, self).__init__(table_name, db_endpoint, Player)
+        super(PlayerAdapter, self).__init__(
+            table_name=table_name,
+            db_endpoint=db_endpoint,
+            adapted_class=Player)

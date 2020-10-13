@@ -11,6 +11,7 @@ class Patches:
 def raise_if_empty(arg):
     if isinstance(arg, (list, set)):
         for value in arg:
+
             raise_if_empty(arg=value)
     elif isinstance(arg, dict):
         for value in arg.values():

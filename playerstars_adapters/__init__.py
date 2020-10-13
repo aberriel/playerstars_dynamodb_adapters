@@ -17,7 +17,9 @@ from .terms_adapter import TermsAdapter
 from .privacy_policy_adapter import PrivacyPolicyAdapter
 from .preduel_adapter import PreDuelAdapter
 from .event_reminder_assistant_adapter import EventReminderAssistantAdapter
+from .aws_task_scheduler_adapter import AwsTaskSchedulerAdapter
 __all__ = [
+    'AwsTaskSchedulerAdapter',
     'TeamTournamentAdapter',
     'PlayerTournamentAdapter',
     'ConsoleAdapter',

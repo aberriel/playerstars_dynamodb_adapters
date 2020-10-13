@@ -6,8 +6,8 @@ from unittest.mock import MagicMock, patch, call
 import pytest
 from playerstars_domain.utils.datetime_helper import aware_utc
 from pytest import raises, fixture
-from clapy_basic_classes.basic_scheduler_adapter.basic_scheduler_adapter import \
-    TaskNotFoundException
+from clapy_basic_classes.basic_scheduler_adapter.basic_scheduler_adapter \
+    import TaskNotFoundException
 from playerstars_adapters import AwsTaskSchedulerAdapter
 
 
@@ -34,7 +34,7 @@ def atsa_factory(request):
     request.cls.atsa_factory = factory
 
 
-prefix = 'chalicelib.era_labs'
+prefix = 'playerstars_adapters.aws_task_scheduler_adapter'
 
 
 @pytest.mark.usefixtures('atsa_factory')
